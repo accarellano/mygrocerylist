@@ -278,7 +278,21 @@ background: transparent;
 	  transition: transform 0.2s ease;
 	}
 
+		tfoot td {
+		  border: none;
+	}
 
+	#remainingBudget {
+	  text-align: center;
+	  margin-top: 10px;
+	  font-size: 18px; /* Same as in the table footer */
+	  font-weight: bold;
+	  color: #333;
+	  width: fit-content;
+	  margin-left: auto;
+	  margin-right: auto;
+	  transform: translateX(23%); /* Aligns to columns 4 & 5 */
+	}
 
 
   </style>
@@ -337,19 +351,27 @@ background: transparent;
 
 <tfoot>
   <tr>
-    <td colspan="3" style="text-align: right;"><strong>Totals:</strong></td>
-    <td id="budgetValue" class="blue" style="font-weight: bold;">₱0.00</td>
-    <td id="totalValue" class="blue" style="font-weight: bold;">₱0.00</td>
+    <td colspan="3"></td>
+    <td style="text-align: center;">
+      <strong>Total Budget</strong><br />
+      <span id="budgetValue" class="blue" style="font-weight: bold;">₱0.00</span>
+    </td>
+    <td style="text-align: center;">
+      <strong>Total Actual</strong><br />
+      <span id="totalValue" class="blue" style="font-weight: bold;">₱0.00</span>
+    </td>
     <td></td>
   </tr>
 </tfoot>
+
+
 </table>
+
+	<div id="remainingBudget" class="summary">Remaining Budget: <span id="remainingValue" class="blue">₱0.00</span></div>
+
 
 </div>
 
- 
-
-<div id="remainingBudget" class="summary">Remaining Budget: <span id="remainingValue" class="blue">₱0.00</span></div>
 
 
 <div class="switch-container" style="display: flex; align-items: center; gap: 10px;">
