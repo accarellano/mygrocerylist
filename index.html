@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Grocery List</title>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* === (Styles remain unchanged from your version, except note column removed) === */
@@ -267,12 +268,15 @@ background: transparent;
   margin: 10px 0 20px;
 }
 
-.zoomed-out-table {
-  transform: scale(0.85);
-  transform-origin: top left;
-  width: calc(100% / 0.85); /* ~117.65% */
-}
+	.zoomed-out-table {
+	  transform: scale(0.85);
+	  transform-origin: top left;
+	  width: calc(100% / 0.85); /* ~117.65% */
+	}
 
+	.table-container {
+	  transition: transform 0.2s ease;
+	}
 
 
 
@@ -348,6 +352,13 @@ background: transparent;
 <div id="remainingBudget" class="summary">Remaining Budget: <span id="remainingValue" class="blue">₱0.00</span></div>
 
 
+<div class="switch-container" style="display: flex; align-items: center; gap: 10px;">
+  <label for="zoomSlider" style="white-space: nowrap;">🔍 Zoom View</label>
+  <input type="range" id="zoomSlider" min="50" max="100" value="100" oninput="adjustZoom(this.value)" />
+  <span id="zoomValue">100%</span>
+</div>
+
+
 
   <textarea placeholder="Notes..."></textarea>
 
@@ -366,13 +377,36 @@ background: transparent;
     </label>
   </div>
 
-<div class="switch-container">
-  <label>🔍 Zoom View</label>
-  <label class="switch">
-    <input type="checkbox" id="zoomToggle" onchange="toggleZoom()" />
-    <span class="slider"></span>
-  </label>
-</div>
+<!-- App Features Section -->
+<section style="margin: 20px 0; font-size: 12px;">
+  <div 
+    onclick="toggleFeatures()" 
+    style="
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      text-align: center;
+    ">
+    <span>App Features</span>
+    <span id="arrow" style="transition: transform 0.3s;">▼</span>
+  </div>
+
+  <div id="featuresContent" style="display: none; margin-top: 10px; border: 1px solid #ccc; border-radius: 10px; padding: 10px; line-height: 1.6;">
+    <ul style="margin-left: 1em;">
+      <li><strong>Dynamic Grocery Table</strong> – Add, edit, and remove items with item number, name, quantity, unit price, category, and actual amount fields.</li>
+      <li><strong>Real-time Budgeting</strong> – Calculates item and total costs instantly and highlights over-budget items.</li>
+      <li><strong>Category Dropdown</strong> – Easily assign each item to a category like Food, Toiletries, or Household.</li>
+      <li><strong>Dark Mode</strong> – Toggle a sleek dark theme for low-light viewing.</li>
+      <li><strong>Zoom View</strong> – Use a slider to adjust table size from 50% to 100% for better readability.</li>
+      <li><strong>Expense Pie Chart</strong> – Visualizes how your budget is distributed across categories in real time.</li>
+    </ul>
+  </div>
+</section>
+
 
 
   <div class="footer">Created by AC | All rights reserved 2025</div>
@@ -551,11 +585,29 @@ background: transparent;
     for (let i = 0; i < 10; i++) addItem();
     dateInput.valueAsDate = new Date();
 
-	function toggleZoom() {
-	  const isZoomed = document.getElementById("zoomToggle").checked;
-	  document.querySelector(".table-container").classList.toggle("zoomed-out-table", isZoomed);
+	function adjustZoom(value) {
+	  const zoomFactor = value / 100;
+	  const container = document.querySelector(".table-container");
+	  container.style.transform = `scale(${zoomFactor})`;
+	  container.style.transformOrigin = "top left";
+	  container.style.width = `${100 / zoomFactor}%`;
+
+	  document.getElementById("zoomValue").textContent = `${value}%`;
 	}
 
+
+	  function toggleFeatures() {
+	    const content = document.getElementById("featuresContent");
+	    const arrow = document.getElementById("arrow");
+
+	    if (content.style.display === "none") {
+	      content.style.display = "block";
+	      arrow.textContent = "▲";
+	    } else {
+ 	     content.style.display = "none";
+ 	     arrow.textContent = "▼";
+ 	   }
+ 	 }
 
 
   </script>
