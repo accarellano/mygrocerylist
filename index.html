@@ -38,12 +38,17 @@
       margin-bottom: 10px;
     }
     #titleColor {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      vertical-align: middle;
-      width: 20px;
-      height: 20px;
+border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+background: transparent;
+  width: 15px;
+  height: 15px;
+ padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
     }
     .top-row {
       display: flex;
@@ -229,30 +234,76 @@
 	  min-width: 120px;
 	  white-space: normal;
 	}
+	
+	#budgetRow .field label {
+	  white-space: nowrap;
+	}
+	.color-bar {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  width: 100vw;
+  height: 8px;
+  cursor: pointer;
+  padding: 0;
+  margin: 10px 0 20px 0;
+  display: block;
+  background: none;
+}
+
+.color-bar::-webkit-color-swatch-wrapper,
+.color-bar::-webkit-color-swatch,
+.color-bar::-moz-color-swatch {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+#colorBar {
+  width: 100vw;
+  height: 8px;
+  background-color: var(--highlight);
+  cursor: pointer;
+  margin: 10px 0 20px;
+}
+
+
+
 
 
   </style>
 </head>
 
 <body>
-  <div id="titleWrapper">
-    <h2 id="title" onclick="editTitle()" style="color: var(--highlight);">My Grocery List</h2>
-    <input type="color" id="titleColor" value="#dcbca7" onchange="changeTitleColor(this.value)" title="Change Title Color"/>
+  <!-- Title and Color Bar -->
+<div id="titleWrapper">
+  <h2 id="title" onclick="editTitle()" style="color: var(--highlight);">My Grocery List</h2>
+</div>
+
+<!-- Hidden color input -->
+<input type="color" id="titleColor" value="#dcbca7" onchange="changeTitleColor(this.value)" style="display: none;" />
+
+<!-- Visible color bar -->
+<div id="colorBar" onclick="document.getElementById('titleColor').click();"></div>
+
+
+<!-- INSERT HERE -->
+<div class="top-row">
+  <div class="field" style="flex-direction: row; gap: 10px;">
+    <label for="dateInput"><strong>Date:</strong></label>
+    <input type="date" id="dateInput" style="max-width: 160px;" />
   </div>
+</div>
+
 
   <div class="top-row">
-    <div class="field">
-      <label for="dateInput">Date:</label>
-      <input type="date" id="dateInput" style="max-width: 160px;" />
-    </div>
+    <div class="field" style="flex: 1; flex-direction: row; gap: 10px; white-space: nowrap;">
+  <label for="budget"><strong>Budget Allotted:</strong></label>
+  <input type="number" id="budget" placeholder="₱" oninput="calculateTotals()" />
+</div>
+
   </div>
 
-  <div class="top-row" id="budgetRow">
-    <div class="field" style="flex: 1;">
-      <label><strong>Budget Allotted:</strong></label>
-      <input type="number" id="budget" placeholder="₱" />
-    </div>
-  </div>
 
 <div class="table-container">
   <table id="groceryTable">
@@ -267,14 +318,30 @@
       </tr>
     </thead>
     <tbody></tbody>
-  </table>
+
+<tr>
+  <td colspan="6">
+    <button onclick="addItem()">+ Add Item</button>
+  </td>
+</tr>
+
+<tfoot>
+  <tr>
+    <td colspan="3" style="text-align: right;"><strong>Totals:</strong></td>
+    <td id="budgetValue" class="blue" style="font-weight: bold;">₱0.00</td>
+    <td id="totalValue" class="blue" style="font-weight: bold;">₱0.00</td>
+    <td></td>
+  </tr>
+</tfoot>
+</table>
+
 </div>
 
+ 
 
-  <button onclick="addItem()">+ Add Item</button>
+<div id="remainingBudget" class="summary">Remaining Budget: <span id="remainingValue" class="blue">₱0.00</span></div>
 
-  <div id="totalAmount" class="summary">Total Actual: <span id="totalValue" class="blue">₱0.00</span></div>
-  <div id="remainingBudget" class="summary">Remaining Budget: <span id="remainingValue" class="blue">₱0.00</span></div>
+
 
   <textarea placeholder="Notes..."></textarea>
 
@@ -311,8 +378,11 @@
     }
 
     function changeTitleColor(color) {
-      titleEl.style.color = color;
-    }
+  titleEl.style.color = color;
+  document.getElementById("colorBar").style.backgroundColor = document.getElementById("titleColor").value;
+
+}
+
 
     function addItem() {
       const row = document.createElement("tr");
@@ -356,36 +426,43 @@
     }
 
     function calculateTotals() {
-      let total = 0;
-      const rows = tableBody.querySelectorAll("tr");
+  let total = 0;
+  let totalBudget = 0;
+  const rows = tableBody.querySelectorAll("tr");
 
-      rows.forEach(row => {
-        const actual = row.cells[4].querySelector("input").value;
-        total += parseFloat(actual) || 0;
-      });
+  rows.forEach(row => {
+    const actual = parseFloat(row.cells[4].querySelector("input").value) || 0;
+    const budget = parseFloat(row.cells[3].querySelector("input").value) || 0;
+    total += actual;
+    totalBudget += budget;
+  });
 
-      const budget = parseFloat(budgetInput.value) || 0;
-      const remaining = budget - total;
+  const budget = parseFloat(budgetInput.value) || 0;
+  const remaining = budget - total;
 
-      document.getElementById("totalValue").textContent = `₱${total.toFixed(2)}`;
-      document.getElementById("remainingValue").textContent = `₱${remaining.toFixed(2)}`;
+  const totalValueEl = document.getElementById("totalValue");
+  const budgetValueEl = document.getElementById("budgetValue");
+  const remainingValueEl = document.getElementById("remainingValue");
 
-      ["red", "blue", "yellow"].forEach(c => {
-        totalAmountEl.querySelector("span").classList.remove(c);
-        remainingBudgetEl.querySelector("span").classList.remove(c);
-      });
+  totalValueEl.textContent = `₱${total.toFixed(2)}`;
+  budgetValueEl.textContent = `₱${totalBudget.toFixed(2)}`;
+  remainingValueEl.textContent = `₱${remaining.toFixed(2)}`;
 
-      if (remaining < 0) {
-        totalAmountEl.querySelector("span").classList.add("red");
-        remainingBudgetEl.querySelector("span").classList.add("red");
-      } else if (remaining > 0) {
-        totalAmountEl.querySelector("span").classList.add("blue");
-        remainingBudgetEl.querySelector("span").classList.add("blue");
-      } else {
-        totalAmountEl.querySelector("span").classList.add("yellow");
-        remainingBudgetEl.querySelector("span").classList.add("yellow");
-      }
-    }
+  // Reset all colors
+  ["red", "blue", "yellow"].forEach(c => {
+    totalValueEl.classList.remove(c);
+    budgetValueEl.classList.remove(c);
+    remainingValueEl.classList.remove(c);
+  });
+
+  // Apply new color
+  let colorClass = remaining < 0 ? "red" : remaining > 0 ? "blue" : "yellow";
+
+  totalValueEl.classList.add(colorClass);
+  budgetValueEl.classList.add(colorClass);
+  remainingValueEl.classList.add(colorClass);
+}
+
 
     function toggleDarkMode() {
       document.body.classList.toggle("dark");
