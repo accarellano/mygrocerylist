@@ -74,13 +74,11 @@
     #budgetRow {
       margin-bottom: 10px;
     }
-
-    table {
+	table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 10px;
     }
-
     th, td {
       border: 1px solid var(--border);
       padding: 8px;
@@ -222,9 +220,16 @@
 	  padding: 5px 10px;
 	}
 
-.remove-btn:hover {
-  background-color: #cccccc; /* Darker on hover */
-}
+	.remove-btn:hover {
+	  background-color: #cccccc; /* Darker on hover */
+	}
+		 .table-container {
+ 		 width: 100%;
+ 	 overflow-x: auto;
+	}
+
+	  }
+	}
   </style>
 </head>
 <body>
@@ -248,7 +253,24 @@
     </div>
   </div>
 
+  <div class="table-container">
   <table id="groceryTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>✔</th>
+        <th>Item</th>
+        <th>Category</th>
+        <th>Budget (₱)</th>
+        <th>Actual (₱)</th>
+        <th>Note</th>
+        <th>🗑</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
     <thead>
       <tr>
         <th>#</th>
