@@ -267,11 +267,12 @@ background: transparent;
   margin: 10px 0 20px;
 }
 
-.zoomed-out {
+.zoomed-out-table {
   transform: scale(0.85);
   transform-origin: top left;
-  width: 117.65%; /* 1 / 0.85 */
+  width: calc(100% / 0.85); /* ~117.65% */
 }
+
 
 
 
@@ -552,8 +553,9 @@ background: transparent;
 
 	function toggleZoom() {
 	  const isZoomed = document.getElementById("zoomToggle").checked;
-	  document.body.classList.toggle("zoomed-out", isZoomed);
+	  document.querySelector(".table-container").classList.toggle("zoomed-out-table", isZoomed);
 	}
+
 
 
   </script>
