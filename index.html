@@ -287,7 +287,6 @@ background: transparent;
 	  margin-top: 10px;
 	  font-size: 18px; /* Same as in the table footer */
 	  font-weight: bold;
-	  color: #333;
 	  width: fit-content;
 	  margin-left: auto;
 	  margin-right: auto;
@@ -384,7 +383,6 @@ background: transparent;
 
   <textarea placeholder="Notes..."></textarea>
 
-  <canvas id="categoryChart" style="max-width: 500px; margin: 20px auto; display: block;"></canvas>
 
   <div class="actions">
     <button onclick="window.print()">🖨 Export / Print</button>
@@ -398,6 +396,8 @@ background: transparent;
       <span class="slider"></span>
     </label>
   </div>
+
+	  <canvas id="categoryChart" style="max-width: 500px; margin: 20px auto; display: block;"></canvas>
 
 <!-- App Features Section -->
 <section style="margin: 20px 0; font-size: 12px;">
@@ -605,7 +605,10 @@ background: transparent;
     }
 
     for (let i = 0; i < 10; i++) addItem();
-    dateInput.valueAsDate = new Date();
+    document.addEventListener("DOMContentLoaded", () => {
+	  dateInput.valueAsDate = new Date();
+	});
+
 
 	function adjustZoom(value) {
 	  const zoomFactor = value / 100;
