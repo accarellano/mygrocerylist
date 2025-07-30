@@ -267,6 +267,11 @@ background: transparent;
   margin: 10px 0 20px;
 }
 
+.zoomed-out {
+  transform: scale(0.85);
+  transform-origin: top left;
+  width: 117.65%; /* 1 / 0.85 */
+}
 
 
 
@@ -359,6 +364,15 @@ background: transparent;
       <span class="slider"></span>
     </label>
   </div>
+
+<div class="switch-container">
+  <label>🔍 Zoom View</label>
+  <label class="switch">
+    <input type="checkbox" id="zoomToggle" onchange="toggleZoom()" />
+    <span class="slider"></span>
+  </label>
+</div>
+
 
   <div class="footer">Created by AC | All rights reserved 2025</div>
 
@@ -535,6 +549,13 @@ background: transparent;
 
     for (let i = 0; i < 10; i++) addItem();
     dateInput.valueAsDate = new Date();
+
+	function toggleZoom() {
+	  const isZoomed = document.getElementById("zoomToggle").checked;
+	  document.body.classList.toggle("zoomed-out", isZoomed);
+	}
+
+
   </script>
 </body>
 </html>
