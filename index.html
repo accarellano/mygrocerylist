@@ -216,8 +216,24 @@
 	  height: auto !important;
 	}
 
+	.table-container {
+	  width: 100%;
+	  overflow-x: auto;
+	}
+
+	.table-container table {
+	  min-width: 600px;
+	}
+
+	td input[type="text"] {
+	  min-width: 120px;
+	  white-space: normal;
+	}
+
+
   </style>
 </head>
+
 <body>
   <div id="titleWrapper">
     <h2 id="title" onclick="editTitle()" style="color: var(--highlight);">My Grocery List</h2>
@@ -238,6 +254,7 @@
     </div>
   </div>
 
+<div class="table-container">
   <table id="groceryTable">
     <thead>
       <tr>
@@ -251,6 +268,8 @@
     </thead>
     <tbody></tbody>
   </table>
+</div>
+
 
   <button onclick="addItem()">+ Add Item</button>
 
